@@ -1,4 +1,4 @@
-#!/system/bin/sh
+#!/bin/sh
 
 echo userspace > /sys/class/devfreq/27700000.npu/governor
 echo 1000000000 > /sys/class/devfreq/27700000.npu/userspace/set_freq

@@ -117,7 +117,7 @@ class RKLLM(object):
         rknnllm_param.mirostat_eta = 0.1
         rknnllm_param.logprobs = False
         rknnllm_param.top_logprobs = 5
-        rknnllm_param.use_gpu = True
+        rknnllm_param.use_gpu = False
         self.handle = RKLLM_Handle_t()
 
         self.rkllm_init = rkllm_lib.rkllm_init
@@ -158,8 +158,10 @@ if __name__ == "__main__":
         exit()
 
     # 定频设置
-    command = "sudo bash fix_freq_{}.sh".format(args.target_platform)
-    subprocess.run(command, shell=True)
+    command = [f"./fix_freq_{args.target_platform}.sh"]
+    if os.geteuid() != 0:
+        command.insert(0, "sudo")
+    subprocess.run(command, check=True)
 
     # 设置文件描述符限制
     resource.setrlimit(resource.RLIMIT_NOFILE, (102400, 102400))
